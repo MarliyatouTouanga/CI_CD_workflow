@@ -89,13 +89,14 @@ jobs:
           username: marliyatou
           password: ${{ secrets.DOCKER_TOKEN }}
 
-      - name: Check Docker login status
-        run: docker info
-        
+
       - name: Build Backend Docker Images
         run: |
           docker build -t marliyatou/first_cd_ci_pipeline/backend:latest ./backend
+          docker build -t marliyatou/first_cd_ci_pipeline/frontend:latest ./frontend
+          docker images
 
       - name: Push Docker images
         run: |
-          docker push marliyatou/first_cd_ci_pipeline/backend:latest 
+          docker push marliyatou/first_cd_ci_pipeline/backend:latest
+          docker push marliyatou/first_cd_ci_pipeline/frontend:latest
