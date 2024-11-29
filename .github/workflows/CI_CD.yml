@@ -7,6 +7,11 @@ on:
       - dev
       - main
 
+permissions:
+  contents: write      
+  pull-requests: write 
+  actions: write
+
 jobs:
   build-and-test-dev:
     if: github.ref == 'refs/heads/dev'
@@ -18,7 +23,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: 18
 
       - name: Install dependencies (frontend & backend)
         run: |
@@ -31,13 +36,18 @@ jobs:
           cd ../backend && npm test
 
       - name: Merge dev into main
-        if: success()
-        run: |
-          git checkout main
-          git merge dev
-          git push origin main
-        #env:
-          #GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        if: ${{ success() }}
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const sourceBranch = 'dev';
+            const targetBranch = 'main';
+            await github.rest.repos.merge({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              base: targetBranch,
+              head: sourceBranch,
+            });
 
   build-test-deploy-main:
     if: github.ref == 'refs/heads/main'
@@ -49,7 +59,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: 18
 
       - name: Install dependencies (frontend & backend)
         run: |
