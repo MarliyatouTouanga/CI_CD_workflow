@@ -92,11 +92,11 @@ jobs:
 
       - name: Build Backend Docker Images
         run: |
-          docker build -t marliyatou/first_cd_ci_pipeline/backend:latest ./backend
-          docker build -t marliyatou/first_cd_ci_pipeline/frontend:latest ./frontend
+          docker build -t marliyatou/backend:latest ./backend
+          docker build -t marliyatou/frontend:latest ./frontend
           docker images
 
       - name: Push Docker images
         run: |
-          docker -D push marliyatou/first_cd_ci_pipeline/backend:latest
-          docker -D push marliyatou/first_cd_ci_pipeline/frontend:latest
+          docker -D push marliyatou/backend:latest
+          docker -D push marliyatou/frontend:latest
