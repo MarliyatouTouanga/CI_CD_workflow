@@ -1,0 +1,88 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+
+jobs:
+  build-and-test-dev:
+    if: github.ref == 'refs/heads/dev'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install dependencies (frontend & backend)
+        run: |
+          cd frontend && npm install
+          cd ../backend && npm install
+
+      - name: Run unit tests
+        run: |
+          cd frontend && npm test
+          cd ../backend && npm test
+
+      - name: Merge dev into main
+        if: success()
+        run: |
+          git checkout main
+          git merge dev
+          git push origin main
+        #env:
+          #GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  build-test-deploy-main:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install dependencies (frontend & backend)
+        run: |
+          cd frontend && npm install
+          cd ../backend && npm install
+
+      - name: Run unit tests
+        run: |
+          cd frontend && npm test
+          cd ../backend && npm test
+
+      - name: Run E2E tests
+        run: cd e2e-tests && node test.js
+      
+      - name: Install Docker Compose
+        run: |
+          sudo curl -L "https://github.com/docker/compose/releases/download/v2.22.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+          sudo chmod +x /usr/local/bin/docker-compose
+          docker-compose --version # Verify installation
+      
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: marliyatou
+          password: ${{ secrets.DOCKER_TOKEN }}
+
+
+      - name: Build Backend Docker Images
+        run: |
+          docker build -t marliyatou/first_cd_ci_pipeline/backend:latest ./backend && docker build -t marliyatou/first_cd_ci_pipeline/frontend:latest ./frontend
+
+      - name: Push Docker images
+        run: |
+          docker push marliyatou/first_cd_ci_pipeline/backend:latest && docker push marliyatou/first_cd_ci_pipeline/frontend:latest
+      #env:
+          #DOCKER_USERNAME: marliyatou
+          #DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
