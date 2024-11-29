@@ -98,5 +98,5 @@ jobs:
 
       - name: Push Docker images
         run: |
-          docker push marliyatou/first_cd_ci_pipeline/backend:latest
-          docker push marliyatou/first_cd_ci_pipeline/frontend:latest
+          docker -d push marliyatou/first_cd_ci_pipeline/backend:latest
+          docker -d push marliyatou/first_cd_ci_pipeline/frontend:latest
