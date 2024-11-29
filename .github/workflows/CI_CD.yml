@@ -50,7 +50,8 @@ jobs:
             });
 
   build-test-deploy-main:
-    if: github.ref == 'refs/heads/main'
+    needs: build-and-test-dev
+    if: github.ref == 'refs/heads/dev' && success()
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -60,6 +61,11 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18
+      
+      - name: Fetch the main
+        run: |
+          git fetch origin main
+          git checkout main
 
       - name: Install dependencies (frontend & backend)
         run: |
@@ -94,6 +100,4 @@ jobs:
       - name: Push Docker images
         run: |
           docker push marliyatou/first_cd_ci_pipeline/backend:latest && docker push marliyatou/first_cd_ci_pipeline/frontend:latest
-      #env:
-          #DOCKER_USERNAME: marliyatou
-          #DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+          
