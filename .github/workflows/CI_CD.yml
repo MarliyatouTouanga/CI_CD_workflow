@@ -68,6 +68,13 @@ jobs:
           sudo curl -L "https://github.com/docker/compose/releases/download/v2.22.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
           sudo chmod +x /usr/local/bin/docker-compose
           docker-compose --version # Verify installation
+      
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: marliyatou
+          password: ${{ secrets.DOCKER_TOKEN }}
+
 
       - name: Build Backend Docker Images
         run: |
@@ -75,9 +82,7 @@ jobs:
 
       - name: Push Docker images
         run: |
-        docker login -u marliyatou -p ${{ secrets.DOCKER_TOKEN }}
-        docker push marliyatou/first_cd_ci_pipeline/backend:latest
-        docker push marliyatou/first_cd_ci_pipeline/frontend:latest
+          docker push marliyatou/first_cd_ci_pipeline/backend:latest && docker push marliyatou/first_cd_ci_pipeline/frontend:latest
       #env:
           #DOCKER_USERNAME: marliyatou
           #DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
