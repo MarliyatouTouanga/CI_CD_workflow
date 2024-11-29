@@ -77,19 +77,13 @@ jobs:
           cd frontend && npm test
           cd ../backend && npm test
           
-      - name: Start the application
-        run: |
-          cd frontend && npm start & 
-          cd ../backend && npm start & 
-          sleep 10 
-          
       - name: Install dependencies for e2e tests
         run: |
-          cd e2e-tests && npm install
+          npx mocha e2e-tests/test.js
 
       - name: Run E2E tests
         run: |
-          cd e2e-tests && npx mocha test.js
+          npx mocha e2e-tests/test.js
       
       - name: Install Docker Compose
         run: |
