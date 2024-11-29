@@ -85,7 +85,7 @@ jobs:
           
       - name: Install dependencies for e2e tests
         run: |
-          cd e2e-tests && npm install
+          npx mocha e2e-tests/test.js
 
       - name: Run E2E tests
         run: |
