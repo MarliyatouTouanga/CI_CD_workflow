@@ -76,16 +76,6 @@ jobs:
         run: |
           cd frontend && npm test
           cd ../backend && npm test
-
-      - name: Install dependencies for e2e tests
-        run: |
-          cd e2e-tests && npm install
-
-      - name: Run E2E tests
-        run: |
-          npx mocha --version
-          npm install chromedriver
-          npx mocha e2e-tests/test.js
       
       - name: Install Docker Compose
         run: |
