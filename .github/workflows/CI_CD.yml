@@ -76,12 +76,6 @@ jobs:
         run: |
           cd frontend && npm test
           cd ../backend && npm test
-          
-      - name: Start the application
-        run: |
-          cd frontend && npm start & 
-          cd ../backend && npm start & 
-          sleep 10 
 
       - name: Install dependencies for e2e tests
         run: |
