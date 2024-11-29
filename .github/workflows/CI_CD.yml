@@ -71,12 +71,15 @@ jobs:
         run: |
           cd frontend && npm install
           cd ../backend && npm install
-          cd ../e2e-tests && npm install
 
       - name: Run unit tests
         run: |
           cd frontend && npm test
           cd ../backend && npm test
+
+      - name: Install dependencies for e2e tests
+        run: |
+          cd e2e-tests && npm install
 
       - name: Run E2E tests
         run: cd e2e-tests && node test.js
