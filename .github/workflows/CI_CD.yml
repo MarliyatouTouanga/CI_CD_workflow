@@ -82,7 +82,7 @@ jobs:
           cd e2e-tests && npm install
 
       - name: Run E2E tests
-        run: cd e2e-tests && npm test
+        run: cd e2e-tests && npx mocha test.js
       
       - name: Install Docker Compose
         run: |
