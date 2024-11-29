@@ -67,10 +67,11 @@ jobs:
           git fetch origin main
           git checkout main
 
-      - name: Install dependencies (frontend & backend)
+      - name: Install dependencies 
         run: |
           cd frontend && npm install
           cd ../backend && npm install
+          cd ../e2e-tests && npm install
 
       - name: Run unit tests
         run: |
@@ -100,4 +101,3 @@ jobs:
       - name: Push Docker images
         run: |
           docker push marliyatou/first_cd_ci_pipeline/backend:latest && docker push marliyatou/first_cd_ci_pipeline/frontend:latest
-          
