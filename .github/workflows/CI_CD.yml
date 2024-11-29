@@ -7,6 +7,11 @@ on:
       - dev
       - main
 
+permissions:
+  contents: write      
+  pull-requests: write 
+  actions: write
+
 jobs:
   build-and-test-dev:
     if: github.ref == 'refs/heads/dev'
